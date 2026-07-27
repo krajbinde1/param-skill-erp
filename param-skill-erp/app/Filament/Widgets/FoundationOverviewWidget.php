@@ -3,29 +3,18 @@
 namespace App\Filament\Widgets;
 
 use Filament\Widgets\Widget;
-use Illuminate\Support\Facades\Auth;
 
+/**
+ * Replaced by role-specific dashboards in Phase 2.
+ */
 class FoundationOverviewWidget extends Widget
 {
-    protected static ?int $sort = 1;
+    protected static bool $isDiscovered = false;
 
     protected string $view = 'filament.widgets.foundation-overview';
 
-    protected int|string|array $columnSpan = 'full';
-
-    /**
-     * @return array<string, mixed>
-     */
-    protected function getViewData(): array
+    public static function canView(): bool
     {
-        $user = Auth::user();
-
-        return [
-            'appName' => config('app.name'),
-            'userName' => $user?->name ?? 'Guest',
-            'userRole' => $user?->primaryRoleName() ?? 'No role assigned',
-            'showEnvironmentWarning' => ! app()->environment('production'),
-            'environment' => config('app.env'),
-        ];
+        return false;
     }
 }

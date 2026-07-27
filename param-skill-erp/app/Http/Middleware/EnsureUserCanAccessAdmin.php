@@ -21,9 +21,11 @@ class EnsureUserCanAccessAdmin
         $user = $request->user();
 
         if ($user && ! $this->centreAccessService->canAccessPanel($user)) {
+            $reason = $this->centreAccessService->denialReason($user) ?? 'Access denied.';
             auth()->logout();
 
-            abort(403, 'Your account is inactive or not allowed to access this panel.');
+            return redirect()->route('filament.admin.auth.login')
+                ->withErrors(['data.login_id' => $reason]);
         }
 
         return $next($request);

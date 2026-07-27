@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\RoleName;
+use App\Enums\UserStatus;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use RuntimeException;
@@ -38,8 +39,8 @@ class SuperAdminSeeder extends Seeder
                 'name' => $name,
                 'email' => $email,
                 'password' => $password,
-                'is_active' => true,
-                'must_change_password' => true,
+                'status' => UserStatus::Active,
+                'must_change_password' => false,
                 'centre_id' => null,
                 'employee_id' => null,
                 'deleted_at' => null,
