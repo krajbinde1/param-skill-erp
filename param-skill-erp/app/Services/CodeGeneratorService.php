@@ -17,6 +17,11 @@ class CodeGeneratorService
         return $this->next('employee', 'EMP', 5);
     }
 
+    public function nextStudentCode(): string
+    {
+        return $this->next('student', 'STD', 6);
+    }
+
     protected function next(string $sequence, string $prefix, int $padding): string
     {
         return DB::transaction(function () use ($sequence, $prefix, $padding) {

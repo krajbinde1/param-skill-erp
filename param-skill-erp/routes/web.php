@@ -12,4 +12,6 @@ Route::middleware(['web', 'auth'])->prefix('admin/exports')->group(function () {
     Route::get('centres.pdf', [ExportController::class, 'centresPdf'])->name('exports.centres.pdf');
     Route::get('employees.csv', [ExportController::class, 'employeesCsv'])->name('exports.employees.csv');
     Route::get('employees.pdf', [ExportController::class, 'employeesPdf'])->name('exports.employees.pdf');
+    Route::get('students.csv', [ExportController::class, 'studentsCsv'])->name('exports.students.csv');
+    Route::get('students.pdf', [ExportController::class, 'studentsPdf'])->name('exports.students.pdf');
 });

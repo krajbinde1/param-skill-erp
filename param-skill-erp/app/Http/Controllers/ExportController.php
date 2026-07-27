@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Centre;
 use App\Models\Employee;
+use App\Models\Student;
 use App\Services\CentreContext;
 use App\Support\Format;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -100,5 +101,54 @@ class ExportController extends Controller
         $pdf = Pdf::loadView('exports.employees', ['employees' => $employees]);
 
         return $pdf->download('employees-'.now()->format('Ymd-His').'.pdf');
+    }
+
+    public function studentsCsv(): StreamedResponse
+    {
+        abort_unless(auth()->user()?->can('students.export'), 403);
+
+        $filename = 'students-'.now()->format('Ymd-His').'.csv';
+
+        return response()->streamDownload(function () {
+            $handle = fopen('php://output', 'w');
+            fputcsv($handle, [
+                'Student Code', 'Student Name', 'Mobile', 'District', 'Taluka', 'Village',
+                'Mobilizer', 'Centre', 'Preferred Centre', 'Admission Status',
+                'Verification Status', 'Centre Visit Status', 'Hostel Required', 'Created Date',
+            ]);
+
+            Student::query()->with(['centre', 'preferredCentre', 'mobilizer'])->orderBy('student_code')->chunk(200, function ($students) use ($handle) {
+                foreach ($students as $student) {
+                    fputcsv($handle, [
+                        $student->student_code,
+                        $student->full_name,
+                        $student->mobile,
+                        $student->district,
+                        $student->taluka,
+                        $student->village,
+                        $student->mobilizer?->full_name,
+                        $student->centre?->centre_name,
+                        $student->preferredCentre?->centre_name,
+                        $student->admission_status->value,
+                        $student->verification_status->value,
+                        $student->centre_visit_status->value,
+                        $student->hostel_required ? 'Yes' : 'No',
+                        Format::date($student->created_at),
+                    ]);
+                }
+            });
+
+            fclose($handle);
+        }, $filename, ['Content-Type' => 'text/csv']);
+    }
+
+    public function studentsPdf(): Response
+    {
+        abort_unless(auth()->user()?->can('students.export'), 403);
+
+        $students = Student::query()->with(['centre', 'preferredCentre', 'mobilizer'])->orderBy('student_code')->get();
+        $pdf = Pdf::loadView('exports.students', compact('students'));
+
+        return $pdf->download('students-'.now()->format('Ymd-His').'.pdf');
     }
 }

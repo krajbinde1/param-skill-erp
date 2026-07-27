@@ -43,7 +43,9 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([])
             ->navigationGroups([
                 'Centre Management',
+                'Student Management',
                 'Employee Management',
+                'Student Management',
                 'Operations',
                 'People',
                 'Finance',

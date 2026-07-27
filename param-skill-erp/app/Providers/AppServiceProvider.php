@@ -5,9 +5,11 @@ namespace App\Providers;
 use App\Enums\RoleName;
 use App\Models\Centre;
 use App\Models\Employee;
+use App\Models\Student;
 use App\Models\User;
 use App\Policies\CentrePolicy;
 use App\Policies\EmployeePolicy;
+use App\Policies\StudentPolicy;
 use Illuminate\Auth\Events\Login as LoginEvent;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
@@ -21,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
     protected array $policies = [
         Centre::class => CentrePolicy::class,
         Employee::class => EmployeePolicy::class,
+        Student::class => StudentPolicy::class,
     ];
 
     public function register(): void
