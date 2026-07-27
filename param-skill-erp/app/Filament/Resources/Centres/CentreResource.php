@@ -19,6 +19,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use UnitEnum;
 
 class CentreResource extends Resource
 {
@@ -28,13 +29,17 @@ class CentreResource extends Resource
 
     protected static ?string $navigationLabel = 'Centres';
 
-    protected static ?string $navigationGroup = 'Centre Management';
+    protected static string|UnitEnum|null $navigationGroup = 'Centre Management';
 
     protected static ?string $modelLabel = 'Centre';
 
     protected static ?string $pluralModelLabel = 'Centres';
 
     protected static ?string $recordTitleAttribute = 'centre_name';
+
+    protected static ?string $slug = null;
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema
     {
