@@ -47,6 +47,18 @@ return [
             'report' => false,
         ],
 
+        /*
+        | Private disk for sensitive documents (Aadhaar, PAN, bank, employee,
+        | student). Never expose this disk via a public URL or storage:link.
+        */
+        'private' => [
+            'driver' => 'local',
+            'root' => storage_path('app/private/documents'),
+            'visibility' => 'private',
+            'throw' => false,
+            'report' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

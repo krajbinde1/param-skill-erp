@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Enums\RoleName;
+use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +22,20 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Gate::before(function (?User $user, string $ability): ?bool {
+            if ($user === null) {
+                return null;
+            }
+
+            if (! $user->is_active) {
+                return false;
+            }
+
+            if ($user->hasRole(RoleName::SuperAdmin->value)) {
+                return true;
+            }
+
+            return null;
+        });
     }
 }
